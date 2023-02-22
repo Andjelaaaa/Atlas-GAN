@@ -205,13 +205,20 @@ if dataset == 'dHCP':
     )
     n_condns = 1
 
+elif dataset == 'CP':
+    fpath = '/media/andjela/SeagatePor1/CP/npz_files/train/*.npz'
+    avg_path = (
+        '/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.npz'
+    )
+    n_condns = 1
+
 elif dataset == 'pHD':
     fpath = './data/predict-hd/npz_files/train_npz/*.npz'
     avg_path = './data/predict-hd/linearaverageof100.npz'
     n_condns = 3
 
 else:
-    raise ValueError('dataset expected to be dHCP or pHD')
+    raise ValueError('dataset expected to be dHCP, CP or pHD')
 
 
 img_paths = glob.glob(fpath)
