@@ -5,6 +5,7 @@ import os
 import pandas as pd
 from distutils.dir_util import copy_tree
 import random
+import nibabel as nib
 
 
 def find_pair(name):
@@ -62,7 +63,10 @@ def transform_to_npz(data_path, df_path):
 
     for img_path in img_paths:
         simg = sitk.ReadImage(img_path)
-        npy_img = sitk.GetArrayFromImage(simg)
+        npy_img = sitk.GetArrayFromImage(simg) #float 32
+        # print(img_path)
+        # npy_img = nib.load(img_path).get_fdata()
+        print(npy_img.shape, npy_img[101,127,85], npy_img.dtype)
 
         path_elements = [s for s in img_path.split("/")]
         scan_id = path_elements[-1] 
@@ -99,30 +103,24 @@ def create_average_train(train_path):
     n = 100
     images = np.array(sorted(os.listdir(train_path)))
     sample = random.choices(images, k=n)
-
-
-    # img_data = np.load(f"{train_path}{images[23]}")['vol']
-    img_data = np.load('/media/andjela/SeagatePor1/CP/npz_files/10006_PS14_001_PS14_053/PS14_001.npz')['vol']
     
-    # print(img_data.files)
-    print(img_data.shape, img_data[56,:,:])
 
-    # image_array = []
-    # for image in sample:
-    #     img_data = np.load(f"{train_path}{image}")["vol"]
-    #     image = img_data[:, :, :, np.newaxis]
-    #     # print('shape', image.shape) #188,229,229
-    #     image_array.append(image)
+    image_array = []
+    for image in sample:
+        img_data = np.load(f"{train_path}{image}")["vol"]
+        image = img_data[:, :, :, np.newaxis]
+        # print('shape', image.shape) #188,229,229
+        image_array.append(image)
 
-    # average = np.mean(np.array(image_array)[:,:,:,:,0], 0)
-    # print(np.array(image_array).shape)
-    # print(np.array(average).shape)
-    # print(average[100,:,:])
+    average = np.mean(np.array(image_array)[:,:,:,:,0], 0)
+    print(np.array(image_array).shape)
+    print(np.array(average).shape)
+    print(average[100,:,:])
 
-    # np.savez_compressed(
-    #         f'/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.npz',
-    #         vol=average,
-    #     )  
+    np.savez_compressed(
+            f'/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.npz',
+            vol=average,
+        )  
 
 if __name__ == '__main__':
 
@@ -131,6 +129,11 @@ if __name__ == '__main__':
 
     npz_path = '/media/andjela/SeagatePor1/CP/npz_files/'
     train_path = '/media/andjela/SeagatePor1/CP/npz_files/train/'
+
     # transform_to_npz(data_path=data_path, df_path=csv_path)
     # select_trainset(npz_path, train_path)
-    create_average_train(train_path)
+    # create_average_train(train_path)
+
+    img_data = np.load('/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.npz')['vol']
+    nib_img = nib.Nifti1Image(img_data, None)
+    nib.save(nib_img, '/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.nii.gz')

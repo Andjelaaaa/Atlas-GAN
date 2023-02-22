@@ -31,6 +31,9 @@ def D_data_generator(
     if dataset == 'dHCP':
         age_max = 45.142857142857  # used for scaling age values
         n_condns = 1  # number of conditions
+    elif dataset == 'CP':
+        age_max = 6.9
+        n_condns = 1  # number of conditions
     elif dataset == 'pHD':
         attribute = 'disease'  # name of attribute in npz archive
         age_max = 87.72895277  # used for scaling age values
@@ -123,6 +126,9 @@ def G_data_generator(
     if dataset == 'dHCP':
         age_max = 45.142857142857  # used for scaling age values
         n_condns = 1  # number of conditions
+    elif dataset == 'CP':
+        age_max = 6.9
+        n_condns = 1 
     elif dataset == 'pHD':
         attribute = 'disease'  # name of attribute in npz archive
         age_max = 87.72895277  # used for scaling age values
