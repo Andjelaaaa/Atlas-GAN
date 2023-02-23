@@ -6,7 +6,7 @@ import pandas as pd
 from distutils.dir_util import copy_tree
 import random
 import nibabel as nib
-
+import skimage.transform as skTrans
 
 def find_pair(name):
     #Outputs patient number, moving and fixed image scanID as strings for further analysis
@@ -66,7 +66,9 @@ def transform_to_npz(data_path, df_path):
         npy_img = sitk.GetArrayFromImage(simg) #float 32
         # print(img_path)
         # npy_img = nib.load(img_path).get_fdata()
-        print(npy_img.shape, npy_img[101,127,85], npy_img.dtype)
+        resized_npy_img = skTrans.resize(npy_img, (160,192,160), order=1, preserve_range=True)
+        print(resized_npy_img.shape)
+        # print(npy_img.shape, npy_img[101,127,85], npy_img.dtype)
 
         path_elements = [s for s in img_path.split("/")]
         scan_id = path_elements[-1] 
@@ -83,7 +85,7 @@ def transform_to_npz(data_path, df_path):
         # Assuming that you have 'age' and 'attribute' loaded, (add other attributes if necessary):
         np.savez_compressed(
             f'/media/andjela/SeagatePor1/CP/npz_files/{sub_number}_{mov}_{fix}/{scan_id}.npz',
-            vol=npy_img,
+            vol=resized_npy_img,
             age=age,
         )   
 def select_trainset(data_path, train_path):
@@ -133,11 +135,12 @@ if __name__ == '__main__':
     npz_path = '/media/andjela/SeagatePor1/CP/npz_files/'
     train_path = '/media/andjela/SeagatePor1/CP/npz_files/train/'
     average_path = '/media/andjela/SeagatePor1/CP/npz_files/averages/'
+
     # transform_to_npz(data_path=data_path, df_path=csv_path)
     # select_trainset(npz_path, train_path)
-    create_average_train(train_path, average_path)
+    # create_average_train(train_path, average_path)
 
     # Save average image to nifti
-    # img_data = np.load('/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.npz')['vol']
-    # nib_img = nib.Nifti1Image(img_data, None)
-    # nib.save(nib_img, '/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.nii.gz')
+    img_data = np.load('/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.npz')['arr_0']
+    nib_img = nib.Nifti1Image(img_data, None)
+    nib.save(nib_img, '/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.nii.gz')

@@ -224,7 +224,7 @@ else:
 img_paths = glob.glob(fpath)
 
 Dtrain_data_generator = D_data_generator(
-    vol_shape=(188, 229, 229), #(160, 192, 160)
+    vol_shape=(160, 192, 160), #(160, 192, 160)
     img_list=img_paths,
     oversample_age=oversample,
     batch_size=batch_size,
@@ -232,7 +232,7 @@ Dtrain_data_generator = D_data_generator(
 )
 
 Gtrain_data_generator = G_data_generator(
-    vol_shape=(188, 229, 229), #(160, 192, 160)
+    vol_shape=(160, 192, 160), #(160, 192, 160)
     img_list=img_paths,
     oversample_age=oversample,
     batch_size=batch_size,
