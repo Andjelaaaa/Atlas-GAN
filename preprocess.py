@@ -90,16 +90,19 @@ def select_trainset(data_path, train_path):
     
     folders = glob.glob(f'{data_path}*')
     total_pairs = len(folders)
+    # total_pairs = 434
     folders_train = folders[0:int(0.8*total_pairs)]
     print(total_pairs)
+    print(len(folders_train))
+    # print(folders_train)
 
     if not os.path.exists(train_path):
         os.mkdir(train_path)
 
-    for folder in folders_train:
-        copy_tree(os.path.join(f'{folder}/'), os.path.join(train_path))
+    for i, folder in enumerate(folders_train):
+        copy_tree(f'{folder}/', train_path)
 
-def create_average_train(train_path):
+def create_average_train(train_path, average_path):
     n = 100
     images = np.array(sorted(os.listdir(train_path)))
     sample = random.choices(images, k=n)
@@ -113,13 +116,13 @@ def create_average_train(train_path):
         image_array.append(image)
 
     average = np.mean(np.array(image_array)[:,:,:,:,0], 0)
-    print(np.array(image_array).shape)
-    print(np.array(average).shape)
-    print(average[100,:,:])
+    
+    if not os.path.exists(average_path):
+        os.mkdir(average_path)
 
     np.savez_compressed(
-            f'/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.npz',
-            vol=average,
+            f'{average_path}linearaverage_100_train.npz',
+            arr_0=average,
         )  
 
 if __name__ == '__main__':
@@ -129,11 +132,12 @@ if __name__ == '__main__':
 
     npz_path = '/media/andjela/SeagatePor1/CP/npz_files/'
     train_path = '/media/andjela/SeagatePor1/CP/npz_files/train/'
-
+    average_path = '/media/andjela/SeagatePor1/CP/npz_files/averages/'
     # transform_to_npz(data_path=data_path, df_path=csv_path)
     # select_trainset(npz_path, train_path)
-    # create_average_train(train_path)
+    create_average_train(train_path, average_path)
 
-    img_data = np.load('/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.npz')['vol']
-    nib_img = nib.Nifti1Image(img_data, None)
-    nib.save(nib_img, '/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.nii.gz')
+    # Save average image to nifti
+    # img_data = np.load('/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.npz')['vol']
+    # nib_img = nib.Nifti1Image(img_data, None)
+    # nib.save(nib_img, '/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.nii.gz')

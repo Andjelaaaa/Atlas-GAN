@@ -145,7 +145,7 @@ def Generator(
     conditional=True,
     normreg=False,
     atlas_model='ours',
-    input_resolution=[160, 192, 160, 1],
+    input_resolution=[188, 229, 229, 1], #[160, 192, 160, 1]
     clip_bckgnd=True,
     initialization='default',
     n_condns=1,
@@ -461,7 +461,7 @@ def Generator(
 def Discriminator(
     ch=32,
     conditional=True,
-    input_resolution=[160, 192, 160, 1],
+    input_resolution=[188, 229, 229, 1], #[160, 192, 160, 1]
     sn_out=True,
     initialization='orthogonal',
     n_condns=1,
