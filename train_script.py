@@ -206,9 +206,13 @@ if dataset == 'dHCP':
     n_condns = 1
 
 elif dataset == 'CP':
-    fpath = '/media/andjela/SeagatePor1/CP/npz_files/train/*.npz'
+    # fpath = '/media/andjela/SeagatePor1/CP/npz_files/train/*.npz'
+    # avg_path = (
+    #     '/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.npz'
+    # )
+    fpath = '/home/GRAMES.POLYMTL.CA/andim/CP/npz_files/train/*.npz'
     avg_path = (
-        '/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.npz'
+        '/home/GRAMES.POLYMTL.CA/andim/CP/npz_files/averages/linearaverage_100_train.npz'
     )
     n_condns = 1
 

@@ -140,7 +140,7 @@ def const_inp(tensor):
 
 
 def Generator(
-    ch=32,
+    ch=4, #32
     full_size=False,
     conditional=True,
     normreg=False,
@@ -459,7 +459,7 @@ def Generator(
 
 
 def Discriminator(
-    ch=32,
+    ch=4, #32
     conditional=True,
     input_resolution=[160, 192, 160, 1], #[160, 192, 160, 1]
     sn_out=True,

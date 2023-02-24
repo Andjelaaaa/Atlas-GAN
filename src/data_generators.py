@@ -9,7 +9,7 @@ def D_data_generator(
     vol_shape,
     img_list,
     oversample_age=True,
-    batch_size=32,
+    batch_size=4,
     dataset='CP',
 ):
     """Data generator for discriminator in conditional setting.
@@ -104,7 +104,7 @@ def G_data_generator(
     vol_shape,
     img_list,
     oversample_age=True,
-    batch_size=32,
+    batch_size=4,
     dataset='CP',
 ):
     """Data generator for discriminator in conditional setting.

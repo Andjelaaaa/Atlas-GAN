@@ -7,6 +7,7 @@ from distutils.dir_util import copy_tree
 import random
 import nibabel as nib
 import skimage.transform as skTrans
+import matplotlib.pyplot as plt
 
 def find_pair(name):
     #Outputs patient number, moving and fixed image scanID as strings for further analysis
@@ -61,14 +62,28 @@ def transform_to_npz(data_path, df_path):
     
     img_paths = glob.glob(f'{data_path}*/*.nii.gz') 
 
+    # print(img_paths[0])
+    # npy_img = nib.load(img_paths[0])
+    # img_data = npy_img.get_fdata()
+    # affine_matrix = npy_img.affine
+    # print(affine_matrix)
+    # plt.imshow(img_data[94,:,:])
+    # plt.show()
+    # resized_npy_img = skTrans.resize(img_data, (160,192,160), order=1, preserve_range=True)
+    # print(resized_npy_img.shape)
+    # plt.imshow(resized_npy_img[80,:,:])
+    # plt.show()
+
+
     for img_path in img_paths:
-        simg = sitk.ReadImage(img_path)
-        npy_img = sitk.GetArrayFromImage(simg) #float 32
+        # simg = sitk.ReadImage(img_path)
+        # npy_img = sitk.GetArrayFromImage(simg) #float 32
         # print(img_path)
-        # npy_img = nib.load(img_path).get_fdata()
-        resized_npy_img = skTrans.resize(npy_img, (160,192,160), order=1, preserve_range=True)
-        print(resized_npy_img.shape)
-        # print(npy_img.shape, npy_img[101,127,85], npy_img.dtype)
+        npy_img = nib.load(img_path)
+        img_data = npy_img.get_fdata()
+        affine_matrix = npy_img.affine
+        resized_npy_img = skTrans.resize(img_data, (160,192,160), order=1, preserve_range=True)
+        # print(resized_npy_img.shape)
 
         path_elements = [s for s in img_path.split("/")]
         scan_id = path_elements[-1] 
@@ -87,6 +102,7 @@ def transform_to_npz(data_path, df_path):
             f'/media/andjela/SeagatePor1/CP/npz_files/{sub_number}_{mov}_{fix}/{scan_id}.npz',
             vol=resized_npy_img,
             age=age,
+            affine=affine_matrix,
         )   
 def select_trainset(data_path, train_path):
     
@@ -111,8 +127,11 @@ def create_average_train(train_path, average_path):
     
 
     image_array = []
+    affine_matrix = np.ones((4,4))
     for image in sample:
         img_data = np.load(f"{train_path}{image}")["vol"]
+        affine = np.load(f"{train_path}{image}")["affine"]
+        affine_matrix = np.matmul(affine, affine_matrix)
         image = img_data[:, :, :, np.newaxis]
         # print('shape', image.shape) #188,229,229
         image_array.append(image)
@@ -125,6 +144,7 @@ def create_average_train(train_path, average_path):
     np.savez_compressed(
             f'{average_path}linearaverage_100_train.npz',
             arr_0=average,
+            affine=affine_matrix,
         )  
 
 if __name__ == '__main__':
@@ -142,5 +162,11 @@ if __name__ == '__main__':
 
     # Save average image to nifti
     img_data = np.load('/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.npz')['arr_0']
-    nib_img = nib.Nifti1Image(img_data, None)
+    affine = np.load('/media/andjela/SeagatePor1/CP/npz_files/10006_PS14_001_PS14_053/PS14_001.npz')['affine']
+    nib_img = nib.Nifti1Image(img_data, affine)
     nib.save(nib_img, '/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.nii.gz')
+
+    # img_data = np.load('/media/andjela/SeagatePor1/CP/npz_files/10006_PS14_001_PS14_053/PS14_001.npz')['vol']
+    # affine = np.load('/media/andjela/SeagatePor1/CP/npz_files/10006_PS14_001_PS14_053/PS14_001.npz')['affine']
+    # nib_img = nib.Nifti1Image(img_data, affine)
+    # nib.save(nib_img, '/media/andjela/SeagatePor1/CP/npz_files/10006_PS14_001_PS14_053/PS14_001.nii.gz')
