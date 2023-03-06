@@ -205,14 +205,28 @@ if dataset == 'dHCP':
     )
     n_condns = 1
 
-elif dataset == 'CP':
+elif dataset == 'CP_f0':
     # fpath = '/media/andjela/SeagatePor1/CP/npz_files/train/*.npz'
     # avg_path = (
     #     '/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.npz'
     # )
-    fpath = '/home/GRAMES.POLYMTL.CA/andim/CP/train/*.npz'
+    fpath = '/home/GRAMES.POLYMTL.CA/andim/duke/temp/andim/f0/train/*.npz'
     avg_path = (
-        '/home/GRAMES.POLYMTL.CA/andim/CP/averages/linearaverage_100_train.npz'
+        '/home/GRAMES.POLYMTL.CA/andim/duke/temp/f0/train/averages/linearaverage_100_train.npz'
+    )
+    n_condns = 1
+
+elif dataset == 'CP_f1':
+    fpath = '/home/GRAMES.POLYMTL.CA/andim/duke/temp/andim/f1/train/*.npz'
+    avg_path = (
+        '/home/GRAMES.POLYMTL.CA/andim/duke/temp/f1/train/averages/linearaverage_100_train.npz'
+    )
+    n_condns = 1
+elif dataset == 'CP_f2':
+ 
+    fpath = '/home/GRAMES.POLYMTL.CA/andim/duke/temp/andim/f2/train/*.npz'
+    avg_path = (
+        '/home/GRAMES.POLYMTL.CA/andim/duke/temp/f2/train/averages/linearaverage_100_train.npz'
     )
     n_condns = 1
 
