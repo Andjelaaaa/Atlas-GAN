@@ -205,30 +205,31 @@ if dataset == 'dHCP':
     )
     n_condns = 1
 
-elif dataset == 'CP_f0':
+elif dataset == 'CP':
     # fpath = '/media/andjela/SeagatePor1/CP/npz_files/train/*.npz'
     # avg_path = (
     #     '/media/andjela/SeagatePor1/CP/npz_files/averages/linearaverage_100_train.npz'
     # )
-    fpath = '/home/GRAMES.POLYMTL.CA/andim/duke/temp/andim/f0/train/*.npz'
-    avg_path = (
-        '/home/GRAMES.POLYMTL.CA/andim/duke/temp/f0/train/averages/linearaverage_100_train.npz'
-    )
-    n_condns = 1
-
-elif dataset == 'CP_f1':
-    fpath = '/home/GRAMES.POLYMTL.CA/andim/duke/temp/andim/f1/train/*.npz'
-    avg_path = (
-        '/home/GRAMES.POLYMTL.CA/andim/duke/temp/f1/train/averages/linearaverage_100_train.npz'
-    )
-    n_condns = 1
-elif dataset == 'CP_f2':
- 
-    fpath = '/home/GRAMES.POLYMTL.CA/andim/duke/temp/andim/f2/train/*.npz'
-    avg_path = (
-        '/home/GRAMES.POLYMTL.CA/andim/duke/temp/f2/train/averages/linearaverage_100_train.npz'
-    )
-    n_condns = 1
+    if 'f0' in exp_name:
+        fpath = '/home/GRAMES.POLYMTL.CA/andim/duke/temp/andim/f0/train/*.npz'
+        avg_path = (
+        '/home/GRAMES.POLYMTL.CA/andim/duke/temp/andim/f0/train/averages/linearaverage_100_train.npz'
+        )
+        n_condns = 1
+    elif 'f1' in exp_name:
+        fpath = '/home/GRAMES.POLYMTL.CA/andim/duke/temp/andim/f1/train/*.npz'
+        avg_path = (
+        '/home/GRAMES.POLYMTL.CA/andim/duke/temp/andim/f1/train/averages/linearaverage_100_train.npz'
+        )
+        n_condns = 1
+    elif 'f2' in exp_name:
+        fpath = '/home/GRAMES.POLYMTL.CA/andim/duke/temp/andim/f2/train/*.npz'
+        avg_path = (
+        '/home/GRAMES.POLYMTL.CA/andim/duke/temp/andim/f2/train/averages/linearaverage_100_train.npz'
+        )
+        n_condns = 1
+    else:
+        raise ValueError('exp_name does not fit the selected folds')
 
 elif dataset == 'pHD':
     fpath = './data/predict-hd/npz_files/train_npz/*.npz'
